@@ -4,7 +4,12 @@
 #import webrepl
 #webrepl.start()
 
-from config import App
+def read_config():
+    import json
+    with open('config.json', 'r')  as f:
+        cfg = json.load(f)
+    return cfg
+
 
 def connect(essid, password):
     import network
@@ -22,5 +27,8 @@ def no_debug():
     # this can be run from the REPL as well
     esp.osdebug(None)
 
-
-connect(App['network']['essid'], App['network']['password'])
+cfg = read_config()
+if cfg['network']['enable']:
+    print('configure network')
+else:
+    print('config.json network not enabled')

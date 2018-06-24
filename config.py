@@ -1,10 +1,7 @@
 import json
 class App:
-  __conf = {
-    with open('config.json', 'r') as configfile:
-	config = json.load(configfile)
-  }
-  __setters = ["essid", "password"]
+  __conf = { json.loads('config.json') }
+  __setters = ['essid', 'password']
 
   @staticmethod
   def config(name):
