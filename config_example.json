@@ -1,0 +1,13 @@
+{
+  "os": {
+    "debug": true
+  },
+  "network": {
+    "enable": false,
+    "essid": "",
+    "password": ""
+  },
+  "webrepl": {
+    "enable": false
+  }
+}
