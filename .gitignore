@@ -1,3 +1,4 @@
+.ttydevice
 config.json
 __pycache__
 *.swp

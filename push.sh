@@ -1,8 +1,13 @@
 #!/bin/bash
 pid=$(/bin/pidof minicom)
 if [ "x" != "x${pid}" ]; then
-    killall  minicom
+	killall  minicom
 fi
-sleep 1
+
+sleep 3
+
 TTY=/dev/ttyUSB0
+if [ -f .ttydevice ]; then
+	source .ttydevice
+fi
 ampy -p $TTY put $1
