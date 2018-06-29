@@ -5,9 +5,9 @@ if [ "x" != "x${pid}" ]; then
 fi
 
 sleep 3
-
-TTY=/dev/ttyUSB0
+export AMPY_PORT=/dev/ttyUSB0
 if [ -f .ttydevice ]; then
-	source .ttydevice
+    source .ttydevice
 fi
-ampy -p $TTY put $1
+
+ampy put $1

@@ -9,28 +9,59 @@ def clear(np):
         np[i] = (0, 0, 0)
     np.write()
 
+
+def cycle(np, number, wait = 25, color = 'white'):
+    n = np.n
+    clear(np)
+
+    if (number // 256) % 2 == 0:
+        brightness = number & 0xff
+    else:
+        brightness = 255 - (number & 0xff)
+
+    if color == 'red':
+        c = (brightness, 0, 0)
+    if color == 'blue':
+        c = (0, 0, brightness)
+    if color == 'white':
+        c = (brightness, brightness, brightness)
+
+    np[number % n] = c
+    np.write()
+    time.sleep_ms(wait)
+
+def bounce(np, number, wait = 120):
+    n = np.n
+    for j in range(n):
+        np[j] = (0, 0, 64)
+    if (number // n) % 2 == 0:
+        np[number % n] = (0, 0, 0)
+    else:
+        np[n - 1 - (number % n)] = (0, 0, 0)
+    np.write()
+    time.sleep_ms(wait)
+
+
 def demo(np):
     n = np.n
 
+    # cycle reverse to zero
+    for i in range((4 * n -1), -1, -1):
+        cycle(np, i, 150, color='white')
+
     # cycle
     for i in range(4 * n):
-        for j in range(n):
-            np[j] = (0, 0, 0)
-        np[i % n] = (1, 1, 1)
-        np.write()
-        time.sleep_ms(25)
+        cycle(np, i, 150, color='blue')
+
+    # cycle reverse to zero
+    for i in range((4 * n -1), -1, -1):
+        cycle(np, i, 150, color='red')
 
     # bounce
     for i in range(4 * n):
-        for j in range(n):
-            np[j] = (0, 0, 64)
-        if (i // n) % 2 == 0:
-            np[i % n] = (0, 0, 0)
-        else:
-            np[n - 1 - (i % n)] = (0, 0, 0)
-        np.write()
-        time.sleep_ms(120)
+        bounce(np, i, wait = 120)
 
+    """
     # fade in/out
     for i in range(0, 4 * 256, 8):
         for j in range(n):
@@ -40,7 +71,7 @@ def demo(np):
                 val = 255 - (i & 0xff)
             np[j] = (val, 0, 0)
         np.write()
-
+    """
     clear(np)
 
 try:
