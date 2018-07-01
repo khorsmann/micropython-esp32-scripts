@@ -12,15 +12,19 @@ def clear(np):
 
 def cycle(np, number, wait = 25, color = 'white'):
     n = np.n
-    clear(np)
+    #clear(np)
 
     if (number // 256) % 2 == 0:
         brightness = number & 0xff
     else:
         brightness = 255 - (number & 0xff)
 
+    if color == 'off':
+        c = (0, 0, 0)
     if color == 'red':
         c = (brightness, 0, 0)
+    if color == 'green':
+        c = (0, brightness, 0)
     if color == 'blue':
         c = (0, 0, brightness)
     if color == 'white':
@@ -45,17 +49,21 @@ def bounce(np, number, wait = 120):
 def demo(np):
     n = np.n
 
-    # cycle reverse to zero
-    for i in range((4 * n -1), -1, -1):
-        cycle(np, i, 150, color='white')
-
     # cycle
     for i in range(4 * n):
-        cycle(np, i, 150, color='blue')
+        cycle(np, i, 150, color='white')
 
     # cycle reverse to zero
     for i in range((4 * n -1), -1, -1):
         cycle(np, i, 150, color='red')
+
+    # cycle
+    for i in range(4 * n):
+        cycle(np, i, 150, color='green')
+
+    # cycle
+    for i in range((4 * n -1), -1, -1):
+        cycle(np, i, 150, color='blue')
 
     # bounce
     for i in range(4 * n):
@@ -72,7 +80,6 @@ def demo(np):
             np[j] = (val, 0, 0)
         np.write()
     """
-    clear(np)
 
 try:
     while True:
