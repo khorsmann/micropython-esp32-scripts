@@ -10,14 +10,17 @@ def clear(np):
     np.write()
 
 
-def cycle(np, number, wait = 25, color = 'white'):
+def cycle(np,number,wait=25,color='white',brightness=None,debug=None):
     n = np.n
-    #clear(np)
+    led = number % n
 
-    if (number // 256) % 2 == 0:
-        brightness = number & 0xff
-    else:
-        brightness = 255 - (number & 0xff)
+    if not brightness:
+        if (number // 256) % 2 == 0:
+            brightness = number & 0xff
+        else:
+            brightness = 255 - (number & 0xff)
+        if brightness == 0:
+            brightness = 10
 
     if color == 'off':
         c = (0, 0, 0)
@@ -30,9 +33,13 @@ def cycle(np, number, wait = 25, color = 'white'):
     if color == 'white':
         c = (brightness, brightness, brightness)
 
-    np[number % n] = c
+    if debug:
+        print("l", led, wait, color, brightness)
+
+    np[led] = c
     np.write()
     time.sleep_ms(wait)
+
 
 def bounce(np, number, wait = 120):
     n = np.n
@@ -49,9 +56,25 @@ def bounce(np, number, wait = 120):
 def demo(np):
     n = np.n
 
+    # one = [0, 2, 4, 6, 8, 10, 1, 3, 5, 7, 9, 11]
+
+    list_com = list(range(n,-1,-2)) + list(range(1,n,2))
+    list_com.remove(n)
+
+    clear(np)
+    for i in list_com:
+        cycle(np, i, 250, color='white', brightness=1)
+    time.sleep_ms(100)
+
+    clear(np)
+    for i in list_com:
+        cycle(np, i, 250, color='white', brightness=255)
+    time.sleep_ms(100)
+
     # cycle
     for i in range(4 * n):
         cycle(np, i, 150, color='white')
+        cycle(np, i, 0, color='off')
 
     # cycle reverse to zero
     for i in range((4 * n -1), -1, -1):
@@ -68,8 +91,7 @@ def demo(np):
     # bounce
     for i in range(4 * n):
         bounce(np, i, wait = 120)
-
-    """
+    """"
     # fade in/out
     for i in range(0, 4 * 256, 8):
         for j in range(n):
