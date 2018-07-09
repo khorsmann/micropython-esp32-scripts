@@ -1,7 +1,23 @@
 import machine, neopixel
+from machine import Pin
 import time
 
-np = neopixel.NeoPixel(machine.Pin(25), 12)
+# NeoPixel on Pin25, 12 LEDs
+np = neopixel.NeoPixel(Pin(25), 12)
+
+# Button on Pin14
+button = Pin(14, Pin.IN)
+state = False
+
+# todo: yes this button bounces, thats a problem
+def callback(p):
+    global state
+    if state == False:
+        state = True
+    else:
+        state = False
+    print('pin change', p, state)
+
 
 def clear(np):
     n = np.n
@@ -56,8 +72,6 @@ def bounce(np, number, wait = 120):
 def demo(np):
     n = np.n
 
-    # one = [0, 2, 4, 6, 8, 10, 1, 3, 5, 7, 9, 11]
-
     list_com = list(range(n,-1,-2)) + list(range(1,n,2))
     list_com.remove(n)
 
@@ -66,9 +80,8 @@ def demo(np):
         cycle(np, i, 250, color='white', brightness=1)
     time.sleep_ms(100)
 
-    clear(np)
     for i in list_com:
-        cycle(np, i, 250, color='white', brightness=255)
+        cycle(np, i, 250, color='white')
     time.sleep_ms(100)
 
     # cycle
@@ -91,7 +104,7 @@ def demo(np):
     # bounce
     for i in range(4 * n):
         bounce(np, i, wait = 120)
-    """"
+    """
     # fade in/out
     for i in range(0, 4 * 256, 8):
         for j in range(n):
@@ -103,9 +116,15 @@ def demo(np):
         np.write()
     """
 
+button.irq(trigger=Pin.IRQ_FALLING,handler=callback)
+clear(np)
+
 try:
     while True:
-        demo(np)
+        if state == True:
+            demo(np)
+        else:
+            clear(np)
 except KeyboardInterrupt:
     print("quit the demo")
 finally:
