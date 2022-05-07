@@ -32,3 +32,31 @@ adduser <youruser> dialout
 
 ./push.sh main.py
 
+# esptool.py for flashing micropython to esp
+
+```shell
+pip install --user esptool
+```
+
+## show flash\_id
+
+```shell
+esptool.py -p /dev/ttyUSB0 flash_id 
+esptool.py v3.3
+Serial port /dev/ttyUSB0
+Connecting....
+Detecting chip type... Unsupported detection protocol, switching and trying again...
+Connecting.......
+Detecting chip type... ESP32
+Chip is ESP32-D0WDQ6 (revision 1)
+Features: WiFi, BT, Dual Core, Coding Scheme None
+Crystal is 40MHz
+MAC: 30:ae:XX:XX:XX:XX
+Uploading stub...
+Running stub...
+Stub running...
+Manufacturer: c8
+Device: 4016
+Detected flash size: 4MB
+Hard resetting via RTS pin...
+```
