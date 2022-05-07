@@ -1,7 +1,8 @@
 #!/bin/bash
 pid=$(/bin/pidof minicom)
 if [ "x" != "x${pid}" ]; then
-	killall  minicom
+    echo "kill all minicom"
+    killall  minicom
 fi
 
 sleep 3
