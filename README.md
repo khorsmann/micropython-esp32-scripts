@@ -1,7 +1,7 @@
 
 # install adafruit ampy for up/download via ttyUSB
 
-sudo pip3 install adafruit-ampy
+pip3 install --user adafruit-ampy
 
 # find the correct ttyUSB device
 
